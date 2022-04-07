@@ -1,0 +1,26 @@
+{
+  "name": "aStar",
+  "version": "1.0.0",
+  "description": "A* 寻路算法",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiudb2021/aStar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qiudb2021/aStar/issues"
+  },
+  "homepage": "https://github.com/qiudb2021/aStar#readme",
+  "dependencies": {
+    "@types/node": "^17.0.23"
+  }
+}
