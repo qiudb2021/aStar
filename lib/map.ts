@@ -3,6 +3,8 @@ import { TreeNode } from "./node/treeNode";
 import { drawLine } from "./view/view";
 import { convert } from "./util";
 import { COLORS } from "./macro";
+import { PathFinder } from "./pathFinder";
+import { Point } from "./point";
 
 /**
  * Map 地图
@@ -16,6 +18,8 @@ export class Map {
     protected _height: number;
     /** 已经创建的树节点（避免重复创建和销毁） */
     protected _poolList: TreeNode[];
+
+    protected _pathFinder: PathFinder;
 
     public static Create(oriList: number[][]) {
         return new Map(oriList);
@@ -55,8 +59,23 @@ export class Map {
             }
             this._dataList.push(list);
         }
+
+        this._pathFinder = PathFinder.Create();
     }
 
+    public findPath(start: Point, goal: Point) {
+        if (!this.walkable(start.x, start.y)) {
+            console.error("起点%j不可通过", start);
+            return null;
+        }
+
+        if (!this.walkable(goal.x, goal.y)) {
+            console.error("终点%j不可通过", goal);
+            return null;
+        }
+
+        return this._pathFinder.findPath(this, start, goal);
+    }
     /** 地图坐标点是否合法 */
     public valid(x: number, y: number): boolean {
         return (x >=0 && x < this._width) && (y >= 0 && y < this._height);

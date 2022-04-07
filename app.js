@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var map_1 = require("./lib/map");
+var point_1 = require("./lib/point");
 var Graphical = require("graphical");
 Graphical.graphical(8111);
 var map = map_1.Map.Create(JSON.parse(fs.readFileSync("./config/map_data.json").toString()));
 map.view();
+map.findPath(point_1.Point.Create(2, 2), point_1.Point.Create(8, 4));
