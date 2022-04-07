@@ -2,7 +2,6 @@
 A* 寻路算法
 
 ```
-project
 |-- lib
 |   |-- node
 |   |   |-- treeNode.ts 树节点类

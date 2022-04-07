@@ -1,5 +1,8 @@
 import { MapNode } from "./node/mapNode";
 import { TreeNode } from "./node/treeNode";
+import { drawLine } from "./view/view";
+import { convert } from "./util";
+import { COLORS } from "./macro";
 
 /**
  * Map 地图
@@ -79,5 +82,22 @@ export class Map {
 
     /** 获取地图节点 */
     public getMapNode(x: number, y: number) {
-        return this.valid(x, y) && this._dataList[y][x];}
+        return this.valid(x, y) && this._dataList[y][x];
+    }
+
+    public view(): void {
+        // 先画出地图格子
+        for (let x = 0; x <= this._width; x++) {
+            drawLine(convert(x, 0), convert(x, this._height), COLORS.gray);
+        }
+
+        for (let y = 0; y <= this._height; y++) {
+            drawLine(convert(0, y), convert(this._width, y), COLORS.gray);
+        }
+        this._dataList.forEach(list => {
+            list.forEach(mapNode => {
+                mapNode.view();
+            });
+        });
+    }
 }

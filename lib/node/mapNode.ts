@@ -1,4 +1,7 @@
 import { Point } from "../point";
+import { drawRectangle } from "../view/view";
+import { convert } from "../util";
+import { GRID_WIDTH, GRID_HEIGHT, COLORS } from "../macro";
 
 export class MapNode {
     /** 地图节点坐标 */
@@ -53,5 +56,11 @@ export class MapNode {
 
     public walkable(): boolean {
         return this._value == 0;
+    }
+
+    public view(): void {
+        if (!this.walkable()) {
+            drawRectangle(convert(this._pos.x, this._pos.y), GRID_WIDTH, GRID_HEIGHT, COLORS.black);
+        }
     }
 }
