@@ -1,6 +1,8 @@
 # aStar
 A* 寻路算法
 
+```
+project
 |-- lib
 |   |-- node
 |   |   |-- treeNode.ts 树节点类
@@ -11,3 +13,4 @@ A* 寻路算法
 |   |-- map_data.json 地图原始数据
 |-- point.ts 地图坐标类
 |-- app.ts
+```
