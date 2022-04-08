@@ -33,13 +33,14 @@ export class PathFinder {
         let current = treeRoot;
         map.setVisited(current.x, current.y, this._index);
 
-        let isEndlessLoop = createEndlessLoop(1000);
+        let isEndlessLoop = createEndlessLoop(100*10000);
         let openList: TreeNode[] = [];
         let child: TreeNode;
         let x: number = -1;
         let y: number = -1;
         let success: boolean = false;
 
+        console.time("inner find path")
         while(current && !isEndlessLoop()) {
             for (let i = 0; i < 4; i++) {
                 switch(i) {
@@ -87,6 +88,7 @@ export class PathFinder {
             // 找到openList中f最小的树节点
             if (!openList.length) {
                 // 寻路失败
+                console.warn("寻路失败")
                 break;
             }
 
@@ -101,7 +103,10 @@ export class PathFinder {
             current = minNode;
             current.view(true);
         }
+        console.timeEnd("inner find path")
 
+
+        console.time("create path list")
         let pathList: Point[] = [];
         if (success) {
             while(current) {
@@ -112,9 +117,13 @@ export class PathFinder {
         } else {
             pathList = null;
         }
+        console.timeEnd("create path list")
 
         // 回收树节点
+        console.time("tree node recycle")
         TreeNode.recycle();
+        console.timeEnd("tree node recycle")
+
 
         return pathList;
     }

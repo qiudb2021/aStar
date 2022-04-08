@@ -15,7 +15,9 @@ map.view();
 
 // view(map.findPath(Point.Create(1, 3), Point.Create(8,8)));
 // view(map.findPath(Point.Create(1, 0), Point.Create(4,0)));
-view(map.findPath(Point.Create(2, 2), Point.Create(8,4)));
+console.time("findpath");
+view(map.findPath(Point.Create(2, 2), Point.Create(120, 26)));
+console.timeEnd("findpath")
 
 console.log(TreeNode.index)
 

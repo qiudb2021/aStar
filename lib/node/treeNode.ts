@@ -115,7 +115,7 @@ export class TreeNode {
     }
 
     public view(center: boolean = false): void {
-        
+        return;
         if (center) {
             drawCircle(convert(this.x, this.y, center), 5, COLORS.blue)
         } else {
