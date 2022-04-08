@@ -78,7 +78,7 @@ export class PathFinder {
                 child.addG(10);
                 child.calcH(goal);
                 child.calcF();
-                // child.view();
+                child.view();
                 current.addChild(child);
     
                 openList.push(child);

@@ -8,21 +8,12 @@ export class MapNode {
     protected _pos: Point;
     /** 地图访问标志 */
     protected _visited: number;
-    /** g值 */
-    protected _g: number;
-    /** h值 */
-    protected _h: number;
-    /** f值 */
-    protected _f: number;
 
     protected _value: number;
 
     public constructor(x: number, y: number, value: number) {
         this._pos = Point.Create(x, y);
         this._visited = 0;
-        this._g = 0;
-        this._f = 0;
-        this._h = 0;
         this._value = value;
     }
 

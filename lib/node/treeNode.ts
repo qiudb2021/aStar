@@ -4,6 +4,7 @@ import { convert } from "../util";
 import { GRID_WIDTH, GRID_HEIGHT, COLORS } from "../macro";
 
 export class TreeNode {
+    public static index = 0;
     protected static _freeList: TreeNode[] = [];
     protected static _useList: TreeNode[] = [];
 
@@ -17,6 +18,7 @@ export class TreeNode {
     protected _g: number;
     protected _h: number;
     protected _f: number;
+    protected _index: number;
 
     public static Create(x: number, y: number, g: number) {
         let cache: TreeNode;
@@ -48,6 +50,7 @@ export class TreeNode {
 
 
     public constructor(x: number, y: number, g: number = 0) {
+        this._index = ++TreeNode.index;
         this._pos = Point.Create(x, y);
         this._parent = <TreeNode><unknown>null;
         this._childList = [];
@@ -128,6 +131,10 @@ export class TreeNode {
     
             leftUp.y += size;
             drawText(leftUp, "(x:"+this.x+",y:"+this.y+")", COLORS.black, size);
+
+            leftUp.y += size*2;
+            drawText(leftUp, "index:"+this._index, COLORS.black, size);
+
         }
     }
 
