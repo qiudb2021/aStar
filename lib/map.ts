@@ -44,7 +44,7 @@ export class Map {
         this._pathFinder = PathFinder.Create();
     }
 
-    public findPath(start: Point, goal: Point) {
+    public findPath(start: Point, goal: Point): Point[] {
         if (!this.walkable(start.x, start.y)) {
             console.error("起点%j不可通过", start);
             return null;

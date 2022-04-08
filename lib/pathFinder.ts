@@ -20,7 +20,7 @@ export class PathFinder {
     }
 
 
-    public findPath(map: Map, start: Point, goal: Point) {
+    public findPath(map: Map, start: Point, goal: Point): Point[] {
         this._index++;
 
         drawCircle(convert(start.x, start.y, true), 5, COLORS.green);
@@ -42,7 +42,6 @@ export class PathFinder {
 
         while(current && !isEndlessLoop()) {
             for (let i = 0; i < 4; i++) {
-                console.log(current.pos)
                 switch(i) {
                     case DIRECTION.Up:
                         x = current.x;
@@ -63,7 +62,6 @@ export class PathFinder {
                     default:
                         break;
                 }
-                console.log(x, y)
 
                 if (!map.walkable(x, y)) {
                     continue;
@@ -80,7 +78,7 @@ export class PathFinder {
                 child.addG(10);
                 child.calcH(goal);
                 child.calcF();
-                child.view();
+                // child.view();
                 current.addChild(child);
     
                 openList.push(child);
@@ -106,19 +104,16 @@ export class PathFinder {
         }
 
         if (success) {
-            let pathList: TreeNode[] = [];
+            let pathList: Point[] = [];
             while(current) {
-                pathList.push(current);
+                pathList.push(current.pos);
                 current = current.parent;
             }
             pathList.reverse();
-            for (let i = 0; i < pathList.length - 2; i++) {
-                let from = pathList[i].pos;
-                let to = pathList[i+1].pos;
-                drawLine(convert(from.x, from.y, true), convert(to.x, to.y, true), COLORS.red, 2);
-            }
+            return pathList;
+        } else {
+            return null;
         }
-        return null;
     }
 
     protected reachGoal(current: TreeNode, goal: Point): boolean {
