@@ -94,7 +94,7 @@ export class PathFinder {
             }
 
             if (this.reachGoal(current, goal)) {
-                console.log("到达终点")
+                // console.log("到达终点")
                 success = true;
                 break;
             }
@@ -102,7 +102,6 @@ export class PathFinder {
             current = queue.dequeue();
             current.view(true);
         }
-
 
         let pathList: Point[] = [];
         if (success) {
@@ -123,19 +122,6 @@ export class PathFinder {
 
     protected reachGoal(current: TreeNode, goal: Point): boolean {
         return current.x === goal.x && current.y === goal.y
-    }
-
-    protected findMin(openList: TreeNode[]): [number, TreeNode] {
-        let lastIdx = openList.length - 1;
-        let min: TreeNode = openList[lastIdx];
-        let idx: number = lastIdx;
-        for (let i = lastIdx - 1; i >= 0; i--) {
-            if (min.f > openList[i].f) {
-                min = openList[i];
-                idx = i;
-            }
-        }
-        return [idx, min];
     }
 
     public createTreeNode(x: number, y: number, g: number = 0) {

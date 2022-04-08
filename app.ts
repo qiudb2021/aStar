@@ -16,7 +16,7 @@ map.view();
 // view(map.findPath(Point.Create(1, 3), Point.Create(8,8)));
 // view(map.findPath(Point.Create(1, 0), Point.Create(4,0)));
 console.time("findpath");
-view(map.findPath(Point.Create(2, 2), Point.Create(120, 26)));
+view(map.findPath(Point.Create(2, 2), Point.Create(110, 26)));
 console.timeEnd("findpath")
 
 console.log(TreeNode.index)
@@ -24,7 +24,8 @@ console.log(TreeNode.index)
 
 function view(pathList: Point[]) {
     if (pathList && pathList.length) {
-        for(let i = 0; i < pathList.length - 2; i++) {
+        for(let i = 0; i < pathList.length - 1; i++) {
+            // console.log("last %j, from %j to %j", pathpathList[i], pathList[i+1])
             drawLine(convert(pathList[i].x, pathList[i].y, true), convert(pathList[i+1].x, pathList[i+1].y, true), COLORS.red, 2);
         }
     }

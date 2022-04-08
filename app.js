@@ -14,12 +14,15 @@ map.view();
 // view(map.findPath(Point.Create(1, 3), Point.Create(8,8)));
 // view(map.findPath(Point.Create(1, 0), Point.Create(4,0)));
 console.time("findpath");
-view(map.findPath(point_1.Point.Create(2, 2), point_1.Point.Create(120, 26)));
+let count = 500;
+while(count --)
+    map.findPath(point_1.Point.Create(2, 2), point_1.Point.Create(180, 180));
 console.timeEnd("findpath");
 console.log(treeNode_1.TreeNode.index);
 function view(pathList) {
     if (pathList && pathList.length) {
-        for (var i = 0; i < pathList.length - 2; i++) {
+        for (var i = 0; i < pathList.length - 1; i++) {
+            // console.log("last %j, from %j to %j", pathpathList[i], pathList[i+1])
             view_1.drawLine(util_1.convert(pathList[i].x, pathList[i].y, true), util_1.convert(pathList[i + 1].x, pathList[i + 1].y, true), macro_1.COLORS.red, 2);
         }
     }
