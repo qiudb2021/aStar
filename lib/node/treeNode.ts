@@ -4,6 +4,9 @@ import { convert } from "../util";
 import { GRID_WIDTH, GRID_HEIGHT, COLORS } from "../macro";
 
 export class TreeNode {
+    protected static _freeList: TreeNode[] = [];
+    protected static _useList: TreeNode[] = [];
+
     /** 树节点坐标 */
     protected _pos: Point;
     /** 父节点 */
@@ -16,8 +19,33 @@ export class TreeNode {
     protected _f: number;
 
     public static Create(x: number, y: number, g: number) {
-        return new TreeNode(x, y, g);
+        let cache: TreeNode;
+        while (cache = TreeNode._freeList.pop()) {
+            cache.reset();
+            cache.x = x;
+            cache.y = y;
+            cache.addG(g);
+
+            TreeNode._useList.push(cache);
+            return cache;
+        }
+
+        let node = new TreeNode(x, y, g);
+        TreeNode._useList.push(node);
+        return node;
     }
+
+    /** 回收 */
+    public static recycle() {
+        let node: TreeNode;
+        while(node = TreeNode._useList.pop()) {
+            this._freeList.push(node);
+        }
+
+        // this._useList.length = 0;
+        console.log("free count %d, useCount %d", this._freeList.length, this._useList.length)
+    }
+
 
     public constructor(x: number, y: number, g: number = 0) {
         this._pos = Point.Create(x, y);
@@ -76,7 +104,7 @@ export class TreeNode {
     public reset(): void {
         this._pos.x = -1;
         this._pos.y = -1;
-        this._parent = <TreeNode><unknown>null;
+        this._parent = null;
         this._childList.length = 0;
         this._g = 0;
         this._h = 0;

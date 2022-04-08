@@ -73,7 +73,7 @@ export class PathFinder {
     
                 map.setVisited(x, y, this._index);
     
-                child = this.createTreeNode(x, y, current.g);
+                child = TreeNode.Create(x, y, current.g);
                 child.parent = current;
                 child.addG(10);
                 child.calcH(goal);
@@ -98,22 +98,25 @@ export class PathFinder {
 
             let [idx, minNode] = this.findMin(openList);
             openList.splice(idx, 1);
-            // this.recycleTreeNode(freeTreeNode);
             current = minNode;
             current.view(true);
         }
 
+        let pathList: Point[] = [];
         if (success) {
-            let pathList: Point[] = [];
             while(current) {
                 pathList.push(current.pos);
                 current = current.parent;
             }
             pathList.reverse();
-            return pathList;
         } else {
-            return null;
+            pathList = null;
         }
+
+        // 回收树节点
+        TreeNode.recycle();
+
+        return pathList;
     }
 
     protected reachGoal(current: TreeNode, goal: Point): boolean {
