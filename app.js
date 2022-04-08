@@ -14,11 +14,7 @@ map.view();
 // view(map.findPath(Point.Create(1, 3), Point.Create(8,8)));
 // view(map.findPath(Point.Create(1, 0), Point.Create(4,0)));
 console.time("findpath");
-let count = 500;
-while(count--) {
-    map.findPath(point_1.Point.Create(2, 2), point_1.Point.Create(110, 10))
-}
-// view(map.findPath(point_1.Point.Create(2, 2), point_1.Point.Create(110, 10)));
+view(map.findPath(point_1.Point.Create(2, 2), point_1.Point.Create(120, 26)));
 console.timeEnd("findpath");
 console.log(treeNode_1.TreeNode.index);
 function view(pathList) {

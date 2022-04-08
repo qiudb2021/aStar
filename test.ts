@@ -1,13 +1,13 @@
-import fs = require("fs");
+import { PriorityQueue } from "./lib/priorityQueue";
 
-let list: number[] = JSON.parse(fs.readFileSync("./config/map_data.json").toString());
-let width = 198;
-let height = 196;
+let queue = PriorityQueue.Create((a, b) => {
+    return b - a;
+});
 
-let results: number[][] = [];
-while(list.length) {
-    results.push(list.splice(0, width));
+[5, 200, 7, 20, 50, 700, 68, 1502, 702].forEach(e => {
+    queue.enqueue(e);
+});
+
+while(!queue.empty()) {
+    console.log("dequeue %j", queue.dequeue())
 }
-
-
-fs.writeFileSync("./config/map_data.json", JSON.stringify(results));

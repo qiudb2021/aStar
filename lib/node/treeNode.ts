@@ -119,21 +119,21 @@ export class TreeNode {
         if (center) {
             drawCircle(convert(this.x, this.y, center), 5, COLORS.blue)
         } else {
-            let leftUp: Point = convert(this._pos.x, this._pos.y)
-            drawRectangle(leftUp, GRID_WIDTH, GRID_HEIGHT, COLORS.green);
+            // let leftUp: Point = convert(this._pos.x, this._pos.y)
+            // drawRectangle(leftUp, GRID_WIDTH, GRID_HEIGHT, COLORS.green);
     
-            let size = 10;
-            leftUp.y += size;
-            drawText(leftUp, "g: "+this._g+";   h:"+this._h, COLORS.yellow, size);
+            // let size = 10;
+            // leftUp.y += size;
+            // drawText(leftUp, "g: "+this._g+";   h:"+this._h, COLORS.yellow, size);
     
-            leftUp.y += size;
-            drawText(leftUp, "f: " + this.f, COLORS.yellow, size);
+            // leftUp.y += size;
+            // drawText(leftUp, "f: " + this.f, COLORS.yellow, size);
     
-            leftUp.y += size;
-            drawText(leftUp, "(x:"+this.x+",y:"+this.y+")", COLORS.black, size);
+            // leftUp.y += size;
+            // drawText(leftUp, "(x:"+this.x+",y:"+this.y+")", COLORS.black, size);
 
-            leftUp.y += size*2;
-            drawText(leftUp, "index:"+this._index, COLORS.black, size);
+            // leftUp.y += size*2;
+            // drawText(leftUp, "index:"+this._index, COLORS.black, size);
 
         }
     }

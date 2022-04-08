@@ -55,11 +55,7 @@ export class Map {
             return null;
         }
 
-        console.time("map find path");
-        let results = this._pathFinder.findPath(this, start, goal);
-        console.timeEnd("map find path");
-
-        return results;
+        return this._pathFinder.findPath(this, start, goal);
     }
     /** 地图坐标点是否合法 */
     public valid(x: number, y: number): boolean {

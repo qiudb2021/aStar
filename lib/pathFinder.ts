@@ -4,6 +4,7 @@ import { drawCircle, drawLine } from "./view/view";
 import { convert, createEndlessLoop } from "./util";
 import { COLORS, DIRECTION } from "./macro";
 import { TreeNode } from "./node/treeNode";
+import { PriorityQueue } from "./priorityQueue";
 
 export class PathFinder {
     /** 已经创建的树节点（避免重复创建和销毁） */
@@ -33,15 +34,15 @@ export class PathFinder {
         let current = treeRoot;
         map.setVisited(current.x, current.y, this._index);
 
-        let isEndlessLoop = createEndlessLoop(100*10000);
-        let openList: TreeNode[] = [];
+        let queue: PriorityQueue<TreeNode> = new PriorityQueue<TreeNode>((a: TreeNode, b: TreeNode) => {
+            return b.f - a.f;
+        });
         let child: TreeNode;
         let x: number = -1;
         let y: number = -1;
         let success: boolean = false;
 
-        console.time("inner find path")
-        while(current && !isEndlessLoop()) {
+        while(current) {
             for (let i = 0; i < 4; i++) {
                 switch(i) {
                     case DIRECTION.Up:
@@ -82,11 +83,11 @@ export class PathFinder {
                 child.view();
                 current.addChild(child);
     
-                openList.push(child);
+                queue.enqueue(child);
             }
 
             // 找到openList中f最小的树节点
-            if (!openList.length) {
+            if (queue.empty()) {
                 // 寻路失败
                 console.warn("寻路失败")
                 break;
@@ -98,15 +99,11 @@ export class PathFinder {
                 break;
             }
 
-            let [idx, minNode] = this.findMin(openList);
-            openList.splice(idx, 1);
-            current = minNode;
+            current = queue.dequeue();
             current.view(true);
         }
-        console.timeEnd("inner find path")
 
 
-        console.time("create path list")
         let pathList: Point[] = [];
         if (success) {
             while(current) {
@@ -117,13 +114,9 @@ export class PathFinder {
         } else {
             pathList = null;
         }
-        console.timeEnd("create path list")
 
         // 回收树节点
-        console.time("tree node recycle")
         TreeNode.recycle();
-        console.timeEnd("tree node recycle")
-
 
         return pathList;
     }
