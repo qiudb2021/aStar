@@ -13,3 +13,12 @@ export function convert(gridX: number, gridY: number, center: boolean = false) {
     let y = center ? gridY * GRID_HEIGHT + GRID_HEIGHT * 0.5 : gridY * GRID_HEIGHT;
     return Point.Create(x, y);
 }
+
+export function createEndlessLoop(count: number): Function {
+    return function() {
+        while(count--) {
+            return false;
+        }
+        return true;
+    }
+}

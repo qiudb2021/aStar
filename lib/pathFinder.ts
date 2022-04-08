@@ -1,19 +1,158 @@
 import { Map } from "./map";
 import { Point } from "./point";
-import { drawCircle } from "./view/view";
-import { convert } from "./util";
-import { COLORS } from "./macro";
+import { drawCircle, drawLine } from "./view/view";
+import { convert, createEndlessLoop } from "./util";
+import { COLORS, DIRECTION } from "./macro";
+import { TreeNode } from "./node/treeNode";
 
 export class PathFinder {
+    /** 已经创建的树节点（避免重复创建和销毁） */
+    protected _poolList: TreeNode[];
+    protected _index: number;
+    
     public static Create(): PathFinder {
         return new PathFinder();
     }
 
-    protected constructor() {}
+    protected constructor() {
+        this._poolList = [];
+        this._index = 0;
+    }
+
 
     public findPath(map: Map, start: Point, goal: Point) {
+        this._index++;
+
         drawCircle(convert(start.x, start.y, true), 5, COLORS.green);
         drawCircle(convert(goal.x, goal.y, true), 5, COLORS.red);
+
+        let treeRoot = this.createTreeNode(start.x, start.y);
+        treeRoot.addG(0);
+        treeRoot.calcH(goal);
+        treeRoot.calcF();
+        let current = treeRoot;
+        map.setVisited(current.x, current.y, this._index);
+
+        let isEndlessLoop = createEndlessLoop(1000);
+        let openList: TreeNode[] = [];
+        let child: TreeNode;
+        let x: number = -1;
+        let y: number = -1;
+        let success: boolean = false;
+
+        while(current && !isEndlessLoop()) {
+            for (let i = 0; i < 4; i++) {
+                console.log(current.pos)
+                switch(i) {
+                    case DIRECTION.Up:
+                        x = current.x;
+                        y = current.y - 1;
+                        break;
+                    case DIRECTION.Right:
+                        x = current.x + 1;
+                        y = current.y;
+                        break;
+                    case DIRECTION.Down:
+                        x = current.x;
+                        y = current.y + 1;
+                        break;
+                    case DIRECTION.Left:
+                        x = current.x - 1;
+                        y = current.y;
+                        break;
+                    default:
+                        break;
+                }
+                console.log(x, y)
+
+                if (!map.walkable(x, y)) {
+                    continue;
+                }
+    
+                if (map.isVisited(x, y, this._index)) {
+                    continue;
+                }
+    
+                map.setVisited(x, y, this._index);
+    
+                child = this.createTreeNode(x, y, current.g);
+                child.parent = current;
+                child.addG(10);
+                child.calcH(goal);
+                child.calcF();
+                child.view();
+                current.addChild(child);
+    
+                openList.push(child);
+            }
+
+            // 找到openList中f最小的树节点
+            if (!openList.length) {
+                // 寻路失败
+                break;
+            }
+
+            if (this.reachGoal(current, goal)) {
+                console.log("到达终点")
+                success = true;
+                break;
+            }
+
+            let [idx, minNode] = this.findMin(openList);
+            openList.splice(idx, 1);
+            // this.recycleTreeNode(freeTreeNode);
+            current = minNode;
+            current.view(true);
+        }
+
+        if (success) {
+            let pathList: TreeNode[] = [];
+            while(current) {
+                pathList.push(current);
+                current = current.parent;
+            }
+            pathList.reverse();
+            for (let i = 0; i < pathList.length - 2; i++) {
+                let from = pathList[i].pos;
+                let to = pathList[i+1].pos;
+                drawLine(convert(from.x, from.y, true), convert(to.x, to.y, true), COLORS.red, 2);
+            }
+        }
         return null;
+    }
+
+    protected reachGoal(current: TreeNode, goal: Point): boolean {
+        return current.x === goal.x && current.y === goal.y
+    }
+
+    protected findMin(openList: TreeNode[]): [number, TreeNode] {
+        let lastIdx = openList.length - 1;
+        let min: TreeNode = openList[lastIdx];
+        let idx: number = lastIdx;
+        for (let i = lastIdx - 1; i >= 0; i--) {
+            if (min.f > openList[i].f) {
+                min = openList[i];
+                idx = i;
+            }
+        }
+        return [idx, min];
+    }
+
+    public createTreeNode(x: number, y: number, g: number = 0) {
+        let node = this._poolList.pop();
+        if (node) {
+            node.reset()
+            node.x = x;
+            node.y = y;
+            node.addG(g)
+            return node;
+        }
+
+        return TreeNode.Create(x, y, g);
+    }
+
+
+    public recycleTreeNode(node: TreeNode) {
+        this._poolList.push(node);
     }
 }

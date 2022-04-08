@@ -1,4 +1,7 @@
 import { Point } from "../point";
+import { drawRectangle, drawText, drawCircle } from "../view/view";
+import { convert } from "../util";
+import { GRID_WIDTH, GRID_HEIGHT, COLORS } from "../macro";
 
 export class TreeNode {
     /** 树节点坐标 */
@@ -8,14 +11,21 @@ export class TreeNode {
     /** 子节点列表 */
     protected _childList: TreeNode[];
 
-    public static Create(x: number, y: number) {
-        return new TreeNode(x, y);
+    protected _g: number;
+    protected _h: number;
+    protected _f: number;
+
+    public static Create(x: number, y: number, g: number) {
+        return new TreeNode(x, y, g);
     }
 
-    public constructor(x: number, y: number) {
+    public constructor(x: number, y: number, g: number = 0) {
         this._pos = Point.Create(x, y);
         this._parent = <TreeNode><unknown>null;
         this._childList = [];
+        this._g = g;
+        this._h = 0;
+        this._f = 0;
     }
 
     /** 更改x坐标 */
@@ -23,14 +33,44 @@ export class TreeNode {
     /** 更改y坐标 */
     public set y(y: number) {this._pos.y = y;}
 
+    public get x(): number {return this._pos.x;}
+
+    public get y(): number {return this._pos.y;}
+
+    public get pos(): Point {return this._pos;}
     /** 设置父节点 */
     public set parent(parent: TreeNode) {
         this._parent = parent;
     }
 
+    public get parent(): TreeNode {return this._parent;}
+
+    public get g(): number {return this._g;}
+
+    public get h(): number {return this._h;}
+
+    public get f(): number {return this._f;}
+
     /** 添加子节点 */
     public addChild(child: TreeNode) {
         this._childList.push(child);
+    }
+
+    /** 累加G值-当前代价 */
+    public addG(g: number): void {
+        this._g += g;
+    }
+
+    /** 计算h值（曼哈顿距离）- 当前点到目标点预估代价 */
+    public calcH(goal: Point): void {
+        let dx = Math.abs(goal.x - this.x);
+        let dy = Math.abs(goal.y - this.y);
+        this._h = (dx + dy) * 10;
+    }
+
+    /** 计算总代价 */
+    public calcF(): void {
+        this._f = this._g + this._h;
     }
 
     public reset(): void {
@@ -38,5 +78,30 @@ export class TreeNode {
         this._pos.y = -1;
         this._parent = <TreeNode><unknown>null;
         this._childList.length = 0;
+        this._g = 0;
+        this._h = 0;
+        this._f = 0;
     }
+
+    public view(center: boolean = false): void {
+        
+        if (center) {
+            drawCircle(convert(this.x, this.y, center), 5, COLORS.blue)
+        } else {
+            let leftUp: Point = convert(this._pos.x, this._pos.y)
+            drawRectangle(leftUp, GRID_WIDTH, GRID_HEIGHT, COLORS.green);
+    
+            let size = 10;
+            leftUp.y += size;
+            drawText(leftUp, "g: "+this._g+";   h:"+this._h, COLORS.yellow, size);
+    
+            leftUp.y += size;
+            drawText(leftUp, "f: " + this.f, COLORS.yellow, size);
+    
+            leftUp.y += size;
+            drawText(leftUp, "(x:"+this.x+",y:"+this.y+")", COLORS.black, size);
+        }
+    }
+
+    
 }

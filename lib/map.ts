@@ -16,28 +16,11 @@ export class Map {
     protected _width: number;
     /** 地图高 */
     protected _height: number;
-    /** 已经创建的树节点（避免重复创建和销毁） */
-    protected _poolList: TreeNode[];
 
     protected _pathFinder: PathFinder;
 
     public static Create(oriList: number[][]) {
         return new Map(oriList);
-    }
-
-    public createTreeNode(x: number, y: number) {
-        let node = this._poolList.pop();
-        if (node) {
-            node.reset()
-            return node;
-        }
-
-        return TreeNode.Create(x, y);
-    }
-
-
-    public recycleTreeNode(node: TreeNode) {
-        this._poolList.push(node);
     }
 
     public constructor(oriList: number[][]) {
@@ -47,8 +30,6 @@ export class Map {
 
         this._width = oriList[0].length;
         this._height = oriList.length;
-
-        this._poolList = [];
 
         // 地图原始数据转化成地图节点数据
         this._dataList = [];

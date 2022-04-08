@@ -13,6 +13,13 @@ export enum COLORS {
 }
 
 /** 地图节点（格子）宽度 */
-export const GRID_WIDTH = 20;
+export const GRID_WIDTH = 80;
 /** 地图节点（格子）高度 */
-export const GRID_HEIGHT = 20;
+export const GRID_HEIGHT = 80;
+
+export enum DIRECTION {
+    Up = 0,
+    Right,
+    Down,
+    Left
+}
