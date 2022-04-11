@@ -1,10 +1,12 @@
 import { MapNode } from "./node/mapNode";
 import { TreeNode } from "./node/treeNode";
 import { drawLine } from "./view/view";
-import { convert } from "./util";
+import { convert, view } from "./util";
 import { COLORS } from "./macro";
 import { PathFinder } from "./pathFinder";
 import { Point } from "./point";
+import { MathUtil } from "./mathUtil";
+import { Vector2 } from "./vector2";
 
 /**
  * Map 地图
@@ -55,7 +57,13 @@ export class Map {
             return null;
         }
 
-        return this._pathFinder.findPath(this, start, goal);
+        let oriPathList = this._pathFinder.findPath(this, start, goal);
+        // console.log(oriPathList.length);
+        view(oriPathList, COLORS.green, 5);
+        this.floyd(oriPathList);
+        view(oriPathList, COLORS.yellow, 2, true);
+        console.log(oriPathList.length)
+        return oriPathList;
     }
     /** 地图坐标点是否合法 */
     public valid(x: number, y: number): boolean {
@@ -83,6 +91,35 @@ export class Map {
     /** 获取地图节点 */
     public getMapNode(x: number, y: number) {
         return this.valid(x, y) && this._dataList[y][x];
+    }
+
+    public floyd(oriPathList: Point[]): Point[] {
+        if (!oriPathList || !oriPathList.length) {
+            return null;
+        }
+
+        let len = oriPathList.length;
+        if (len < 3) {
+            // 不需要处理
+            return oriPathList;
+        }
+
+        let vector: Vector2 = Vector2.Create(oriPathList[len - 2], oriPathList[len - 1])
+        let tmpVector: Vector2 = Vector2.Create(Point.Create(0, 0), Point.Create(0, 0));
+        let p0: Point, p1: Point;
+        for (let i = len - 3; i >= 0; i--) {
+            p0 = oriPathList[i];
+            p1 = oriPathList[i+1];
+            tmpVector.x = p1.x - p0.x;
+            tmpVector.y = p1.y - p0.y;
+
+            if (Vector2.Cross(vector, tmpVector) == 0) {
+                oriPathList.splice(i+1, 1)
+            } else {
+                vector.x = tmpVector.x;
+                vector.y = tmpVector.y;
+            }
+        }
     }
 
     public view(): void {

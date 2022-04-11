@@ -45,7 +45,7 @@ export class TreeNode {
         }
 
         // this._useList.length = 0;
-        console.log("free count %d, useCount %d", this._freeList.length, this._useList.length)
+        // console.log("free count %d, useCount %d", this._freeList.length, this._useList.length)
     }
 
 

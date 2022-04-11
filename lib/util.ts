@@ -1,5 +1,6 @@
 import { Point } from "./point";
-import { GRID_WIDTH, GRID_HEIGHT } from "./macro";
+import { GRID_WIDTH, GRID_HEIGHT, COLORS } from "./macro";
+import { drawLine, drawCircle } from "./view/view";
 
 
 /**
@@ -21,4 +22,20 @@ export function createEndlessLoop(count: number): Function {
         }
         return true;
     }
+}
+
+export function view(pathList: Point[], color: COLORS, width: number = 1, center: boolean = false) {
+    if (pathList && pathList.length) {
+        for(let i = 0; i < pathList.length - 1; i++) {
+            drawLine(convert(pathList[i].x, pathList[i].y, true), convert(pathList[i+1].x, pathList[i+1].y, true), color, width);
+        }
+
+        if (center) {
+            for (let i = 0; i < pathList.length; i++) {
+                drawCircle(convert(pathList[i].x, pathList[i].y, true), 5, COLORS.blue);
+            }
+        }
+    }
+
+
 }
