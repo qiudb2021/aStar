@@ -5,7 +5,6 @@ import { convert, view } from "./util";
 import { COLORS } from "./macro";
 import { PathFinder } from "./pathFinder";
 import { Point } from "./point";
-import { MathUtil } from "./mathUtil";
 import { Vector2 } from "./vector2";
 
 /**
