@@ -1,6 +1,8 @@
 import { Point } from "./point";
 
 export class Vector2 {
+    // 用于跟踪每次寻路需要创建几次的Vector2，避免大量创建导致效率低下
+    public static index: number = 0;
     protected _x: number;
     protected _y: number;
 
@@ -16,6 +18,7 @@ export class Vector2 {
     protected constructor(x: number, y: number) {
         this._x = x;
         this._y = y;
+        Vector2.index++;
     }
 
     public get x(): number {return this._x;}

@@ -62,7 +62,7 @@ export class Map {
         view(oriPathList, COLORS.green, 5);
         this.floyd(oriPathList);
         view(oriPathList, COLORS.yellow, 2, true);
-        console.log(oriPathList.length)
+        console.log(Vector2.index)
         return oriPathList;
     }
     /** 地图坐标点是否合法 */
